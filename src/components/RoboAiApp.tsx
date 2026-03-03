@@ -99,9 +99,21 @@ export default function RoboAiApp() {
       const answer = result.text.trim();
       addChatMessage("ROBO", answer);
       speak(answer);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      handleError("Failed to get response from AI.");
+      let errorMessage = "Failed to get response from AI.";
+      
+      if (e.message?.includes("429")) {
+        errorMessage = "Quota exceeded (Rate Limit). Please wait a minute and try again.";
+      } else if (e.message?.includes("403") || e.message?.includes("401")) {
+        errorMessage = "Invalid API Key or Permission denied. Check your Vercel settings.";
+      } else if (e.message?.includes("500")) {
+        errorMessage = "Gemini AI is currently overloaded. Try again later.";
+      } else if (e.message) {
+        errorMessage = `AI Error: ${e.message.substring(0, 50)}...`;
+      }
+      
+      handleError(errorMessage);
     }
   };
 
