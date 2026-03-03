@@ -16,6 +16,8 @@ const STATE_CONFIG = {
 
 const SYSTEM_PROMPT =
   "You are ROBO, a helpful voice assistant. " +
+  "You were created and designed by Durga Praveen. " +
+  "If anyone asks who created or designed you, always answer that it was Durga Praveen. " +
   "Reply in 1-2 short sentences. Plain text only. No symbols or markdown.";
 
 // @ts-ignore
@@ -165,8 +167,13 @@ export default function RoboAiApp() {
         <div className="w-full max-w-3xl mt-4 space-y-2">
           <ChatLog messages={chatLog} />
           <InputBar isBusy={isBusy} onSend={handleSendText} />
-          <div className="h-6 text-sm font-mono font-bold" style={{ color: STATE_CONFIG[state].color }}>
-            ● {STATE_CONFIG[state].label}
+          <div className="flex justify-between items-center h-6 text-sm font-mono font-bold">
+            <div style={{ color: STATE_CONFIG[state].color }}>
+              ● {STATE_CONFIG[state].label}
+            </div>
+            <div className="text-[#304060] opacity-70">
+              Designed by Durga Praveen
+            </div>
           </div>
         </div>
       </main>
