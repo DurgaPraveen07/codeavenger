@@ -1,6 +1,6 @@
 
 import React from 'react';
-import RoboAiApp from './src/components/RoboAiApp';
+import RoboAiApp from './components/RoboAiApp';
 
 const App: React.FC = () => {
   return <RoboAiApp />;

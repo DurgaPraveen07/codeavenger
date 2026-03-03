@@ -1,5 +1,7 @@
 {
   "name": "ROBO AI - Voice Assistant",
   "description": "A web-based voice assistant with an animated robot face that listens to your questions and provides spoken answers from an AI.",
-  "requestFramePermissions": ["microphone"]
+  "requestFramePermissions": [
+    "microphone"
+  ]
 }

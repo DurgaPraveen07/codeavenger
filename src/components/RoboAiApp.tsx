@@ -29,13 +29,14 @@ export default function RoboAiApp() {
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
-    if (process.env.GEMINI_API_KEY) {
-      aiRef.current = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (apiKey) {
+      aiRef.current = new GoogleGenAI({ apiKey });
     } else {
-      handleError("Gemini API key not found.")
+      handleError("Gemini API key not found. Please set VITE_GEMINI_API_KEY in your environment variables.")
     }
     addChatMessage("ROBO", "Hi! I am ROBO AI. Type a question or press MIC to speak!");
-    addChatMessage("INFO", `TTS:ON  MIC:ON  API:${process.env.GEMINI_API_KEY ? 'Connected' : 'Disconnected'}`);
+    addChatMessage("INFO", `TTS:ON  MIC:ON  API:${apiKey ? 'Connected' : 'Disconnected'}`);
   }, []);
 
   const addChatMessage = (sender: ChatMessage['sender'], message: string) => {
