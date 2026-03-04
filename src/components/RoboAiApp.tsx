@@ -90,7 +90,7 @@ export default function RoboAiApp() {
     try {
       const model = aiRef.current.models;
       const result = await model.generateContent({
-        model: 'gemini-3.1-pro-preview',
+        model: 'gemini-3-flash-preview',
         contents: [{ role: 'user', parts: [{ text: question }] }],
         config: {
           systemInstruction: SYSTEM_PROMPT,
@@ -103,14 +103,18 @@ export default function RoboAiApp() {
       console.error(e);
       let errorMessage = "Failed to get response from AI.";
       
-      if (e.message?.includes("503")) {
+      const rawMessage = e.message || "";
+      if (rawMessage.includes("503")) {
         errorMessage = "Google's servers are overloaded (503). Please wait 10 seconds and try again.";
-      } else if (e.message?.includes("429")) {
-        errorMessage = "Quota exceeded (Rate Limit). Please wait a minute.";
-      } else if (e.message?.includes("403") || e.message?.includes("401")) {
+      } else if (rawMessage.includes("429")) {
+        // Try to extract the retry time if present
+        const retryMatch = rawMessage.match(/retry in ([\d.]+)s/);
+        const seconds = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) : 30;
+        errorMessage = `Quota exceeded (Rate Limit). Please wait ${seconds} seconds and try again.`;
+      } else if (rawMessage.includes("403") || rawMessage.includes("401")) {
         errorMessage = "Invalid API Key or Permission denied.";
-      } else if (e.message) {
-        errorMessage = `AI Error: ${e.message.substring(0, 60)}...`;
+      } else if (rawMessage) {
+        errorMessage = `AI Error: ${rawMessage.substring(0, 60)}...`;
       }
       
       handleError(errorMessage);
